@@ -2,7 +2,7 @@ from settings import *
 import pygame, random
 
 class Reel:
-    def __init__(self,pos) -> None:
+    def __init__(self, pos) -> None:
         self.symbol_list = pygame.sprite.Group()
         self.shuffled_keys = list(symbols.keys())
         random.shuffle(self.shuffled_keys)
@@ -14,7 +14,7 @@ class Reel:
         self.stop_sound = pygame.mixer.Sound('audio/stop.wav')
         self.stop_sound.set_volume(0.5)
 
-        # get index as well as otem in list
+        # get index as well as item in list
         for idx, item in enumerate(self.shuffled_keys):
             self.symbol_list.add(Symbol(symbols[item], pos, idx))
             pos = list(pos)
@@ -41,7 +41,7 @@ class Reel:
                     if symbol.rect.top == 1200:
                         if reel_is_stopping:
                             self.reel_is_spinning = False
-                            #self.stop_sound.play()
+                            # self.stop_sound.play()
                         symbol_idx = symbol.idx
                         symbol.kill()
                         # Spawn random symbol in place of the above
@@ -53,6 +53,12 @@ class Reel:
         self.spin_time= 1000 + delay_time
         self.reel_is_spinning = True
 
+    def reel_spin_result(self):
+        # Get and return text representation of symbols in a given reel
+        spin_symbols = []
+        for i in GAME_INDEXES:
+            spin_symbols.append(self.symbol_list.sprites()[i].sym_type)
+        return spin_symbols[::-1]
 
 class Symbol(pygame.sprite.Sprite):
     def __init__(self, pathToFile, pos, idx ):
